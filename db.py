@@ -1,6 +1,5 @@
-import sqlite3
+import sqlite3, click
 
-import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 
@@ -31,7 +30,7 @@ def init_db():
 @with_appcontext
 def init_db_command():
     init_db()
-    click.echo("Initialized the database.")
+    print("Initialized the database.")
 
 
 def init_app(app):

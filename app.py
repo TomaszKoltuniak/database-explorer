@@ -1,6 +1,5 @@
 from flask import Flask, redirect, render_template, request, url_for
-import click
-import gspread, json, os, sqlite3, requests
+import json, os, sqlite3, requests, click
 from flask_login import (
     LoginManager,
     current_user,
