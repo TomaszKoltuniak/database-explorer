@@ -1,0 +1,13 @@
+Todo list:
++ add new company
+- better UI, UX, CSS
+- github
+- docker
+- real hosting
+- mobile responsive design, media queries
+- automatic saving new records to database in a separate thread
+- number of open positions in every company e.g. 3/4
+- SSL certificate
+- dropdowns - one company, multiple fields of work
+- dropdowns comments
+- change user's privileges

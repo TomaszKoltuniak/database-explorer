@@ -1,0 +1,83 @@
+header {
+    position: fixed;
+    top: 0vh;
+    display: flex;
+    justify-content: space-evenly;
+    height: 5vh;
+    align-items: center;
+    background-color: white;
+    z-index: 5;
+    padding-top: 8vh;
+    padding-bottom: 8vh;
+    width: 100vw;
+}
+thead > tr > th {
+    position: sticky;
+    top: 14.5vh;
+    z-index: 3;
+}
+table {
+    margin-top: 14vh;
+}
+tbody > tr > td:nth-of-type(2),
+thead > tr > th:nth-of-type(2) {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+}
+
+thead > tr > th:nth-of-type(2) {
+    z-index: 5;
+}
+
+thead > tr > th {
+    white-space: nowrap;
+}
+dialog {
+    position: absolute;
+    margin: auto;
+    z-index: 10;
+    width: 40vw;
+}
+h4.guest {
+    margin-top: 20vh;
+    text-align: center;
+}
+p.guest {
+    margin-top: 5vh;
+    text-align: center;
+}
+img {
+    padding-bottom: -100px;
+}
+.new_comment {
+    margin: 1%;
+}
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="email"] {
+    margin: 1%;
+}
+#search_form {
+    display: flex;
+    flex-wrap: nowrap;
+}
+#comments {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.wrap_comments {
+    white-space: nowrap;
+}
+dialog > form > input {
+    /* float: right; */
+    width: 100%;
+}
+#addCompanySubmitButton {
+    width: auto;
+}
+/* #edit_id {
+    display: none;
+} */
