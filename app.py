@@ -181,15 +181,12 @@ def add():
 def edit():
     if request.method == "POST" and current_user.privileges in ["admin", "privileged"]:
         edited_record = {}
-        print('|||||||||||||||||||')
-        print(request.form.get("e_id"))
         for key, value in COLUMNS_DICT.items():
             edited_record[value] = request.form.get(f'{key}')
 
-        # edited_record["id"] = request.form.get("e_id")
-        print(edited_record)
-        # edit_company(edited_record)
-        # edit_comments(request.form.getlist("comment"), current_user.name, edited_record["id"])
+        edited_record["id"] = request.form.get("e_id")
+        edit_company(edited_record)
+        edit_comments(request.form.getlist("comment"), current_user.name, edited_record["id"])
         return redirect(url_for("index"))
 
 

@@ -118,7 +118,6 @@ def add_company(new_record: dict):
         )
         cursor.execute(query, values)
         new_record_id = cursor.lastrowid
-        # connection.commit()
     return new_record_id
 
 
@@ -154,32 +153,41 @@ def get_comments(company_id: int):
 def edit_company(edited_record: dict):
     print('--------------------')
     print(edited_record)
-    # with sqlite3.connect("database.sqlite3") as connection:
-    #     cursor = connection.cursor()
-    #     query = f"""UPDATE companies
-    #     SET `Company name` = ?, `Field of work` = ?, `Address` = ?, `Name of Mentor/ Contact person` = ?, `Phone number` = ?, `Email` = ?, `Website` = ?, `Max number of students` = ?, `Current student count` = ?, `Status` = ?, `Commute` = ?, `Required additional equipment/ clothes` = ?, `Important information` = ?, `Last update` = strftime('%Y-%m-%d %H:%M', 'now', 'localtime')
-    #     WHERE id = ?"""
-    #     values = (
-    #         edited_record["Company name"],
-    #         edited_record["Field of work"],
-    #         edited_record["Address"],
-    #         edited_record["Name of Mentor/ Contact person"],
-    #         edited_record["Phone number"],
-    #         edited_record["Email"],
-    #         edited_record["Website"],
-    #         edited_record["Max number of students"],
-    #         edited_record["Current student count"],
-    #         edited_record["Status"],
-    #         edited_record["Commute"],
-    #         edited_record["Required additional equipment/ clothes"],
-    #         edited_record["Important information"],
-    #         edited_record["id"],
-    #     )
-    #     cursor.execute(query, values)
-    return True
+    with sqlite3.connect("database.sqlite3") as connection:
+        cursor = connection.cursor()
+        query = f"""UPDATE companies
+        SET `Company name` = ?, `Field of work` = ?, `Address` = ?, `Name of Mentor/ Contact person` = ?, `Phone number` = ?, `Email` = ?, `Website` = ?, `Max number of students` = ?, `Current student count` = ?, `Status` = ?, `Commute` = ?, `Required additional equipment/ clothes` = ?, `Important information` = ?, `Last update` = strftime('%Y-%m-%d %H:%M', 'now', 'localtime')
+        WHERE id = ?"""
+        values = (
+            edited_record["Company name"],
+            edited_record["Field of work"],
+            edited_record["Address"],
+            edited_record["Name of Mentor/ Contact person"],
+            edited_record["Phone number"],
+            edited_record["Email"],
+            edited_record["Website"],
+            edited_record["Max number of students"],
+            edited_record["Current student count"],
+            edited_record["Status"],
+            edited_record["Commute"],
+            edited_record["Required additional equipment/ clothes"],
+            edited_record["Important information"],
+            edited_record["id"],
+        )
+        cursor.execute(query, values)
+    return
 
 
 def edit_comments(comments, user, company_id):
-    print('+++++++++++++++++++++')
-    print(comments, user, company_id)
-    return comments
+    print('--------------------')
+    print(comments)
+    for comment in comments:
+        with sqlite3.connect("database.sqlite3") as connection:
+            cursor = connection.cursor()
+            query = f"""select * from comments where `id` = '?'"""
+            # values = (comment['id'])
+            print(comment)
+            # cursor.execute(query, values)
+            # result = cursor.fetchone()
+            # if result == None:
+    return

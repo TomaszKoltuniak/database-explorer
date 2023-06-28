@@ -17,9 +17,8 @@ function closeDialog() {
     addCompanyDialog.close();
 }
 
-function addCommentField(content='', parent_id='comments') {
+function addCommentField(content='', parent_id='comments', comment_id=null) {
     var commentSections = document.getElementById(parent_id);
-    // commentSections.innerHTML = null;
     var newCommentField = document.createElement("input");
     newCommentField.type = "text";
     newCommentField.name = "comment";
@@ -56,5 +55,3 @@ function showEditDialog(id, record) {
         addCommentField(comment.Content, 'e_comments');
     })
 }
-
-
