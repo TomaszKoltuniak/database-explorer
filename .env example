@@ -1,0 +1,5 @@
+# This file is a template for the .env file. You need to fill in the values for the variables and rename the file to .env
+# You can find the values for the variables in the Google Cloud Console -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+GOOGLE_DISCOVERY_URL="https://accounts.google.com/.well-known/openid-configuration"
