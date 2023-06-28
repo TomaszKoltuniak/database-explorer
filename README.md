@@ -6,9 +6,18 @@ It's a python flask based web app database explorer made for the EU Mobility Sve
 ```
 gh repo clone TomaszKoltuniak/database-explorer
 ```
+
 2. Install the requirements
 ```
 python3 pip install -r requirements.txt
 ```
-3. Run the app.py file
-4. Open the localhost:5000 in your browser
+
+3. Set the environment variables in the .env example file and change it's name to .env
+```
+Google Cloud Console -> APIs & Services -> Credentials -> OAuth 2.0 Client IDs
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+```
+4. Run the main file app.py
+
+5. Open the https://localhost:5000 in your browser
