@@ -18,6 +18,7 @@ from db import (
     add_comments,
     edit_company,
     edit_comments,
+    delete_company,
 )
 from user import User
 
@@ -186,7 +187,14 @@ def edit():
 
         edited_record["id"] = request.form.get("e_id")
         edit_company(edited_record)
-        edit_comments(request.form.getlist("comment"), current_user.name, edited_record["id"])
+        edit_comments(request.form.getlist(), current_user.name, edited_record["id"])
+        return redirect(url_for("index"))
+    
+
+@app.route("/delete", methods=["GET", "POST"])
+def delete():
+    if request.method == "POST" and current_user.privileges in ["admin", "privileged"]:
+        delete_company(request.form.get("d_id"))
         return redirect(url_for("index"))
 
 
