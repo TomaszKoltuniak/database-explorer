@@ -42,6 +42,7 @@
           alt="EU Mobility Sverige Logo"
           width="200"
       /></a>
+
       <!-- Search form -->
       <form id="search_form" method="POST" action="/">
         <input
@@ -181,14 +182,13 @@
     <!-- Edit company -->
     <dialog id="editCompanyDialog">
       <form method="POST" action="/edit" id="editCompanyForm">
-        <input type="text" id="e_id" name="e_id"/><br>
+        <input type="hidden" id="e_id" name="e_id"/>
 
         <label for="e_company_name">Name of the company:</label>
         <input
           type="text"
           id="e_company_name"
           name="company_name"
-
           required
         />
 
@@ -253,16 +253,6 @@
         <label for="info">Important information:</label>
         <input type="text" id="e_info" name="info" />
 
-        <label>Comments:</label>
-        <button
-          type="button"
-          onclick="addCommentField()"
-          class="btn btn-primary new_comment"
-        >
-          Add comment
-        </button>
-        <div id="e_comments"></div>
-
         <button
           value="cancel"
           formmethod="dialog"
@@ -278,6 +268,38 @@
           class="btn btn-primary search_btn"
         />
       </form>
+        
+      <!-- Comments form -->
+        <label>Comments:</label>
+        <button
+          type="button"
+          onclick="addCommentField()"
+          class="btn btn-primary new_comment"
+        >
+          Add comment 
+        </button>
+        <div id="e_comments">
+          {% for comment in comments %}
+          <input
+            type="text"
+            name="e_comments_content"
+            value="{{ comment['Content'] }}"
+          />
+          <input
+            type="text"
+            name="e_comments_author"
+            value="{{ comment['Author'] }}"
+            readonly
+          />
+          <input
+            type="text"
+            name="e_comments_date"
+            value="{{ comment['Date'] }}"
+            readonly
+          />
+          {% endfor %}
+        </div>
+
     </dialog>
 
     <!-- All data table -->
@@ -305,9 +327,13 @@
           </td>
           {% elif key == 'id' %}
           <td>
-            <button onclick="showEditDialog(`{{ value }}`, `{{ item }}`)" class="btn btn-primary search_btn">
+            <button onclick="showEditDialog(`{{ value }}`, `{{ item }}`)" class="btn btn-primary search_btn edit">
               Edit
-            </button>            
+            </button>
+            <form method="POST" action="/delete">
+              <input type="hidden" name="d_id" value="{{ value }}" />
+              <input type="submit" value="Delete" class="btn search_btn btn-danger delete" />
+            </form>
           </td>
           {% else %}
           <td>{{ value }}</td>

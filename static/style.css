@@ -78,6 +78,9 @@ dialog > form > input {
 #addCompanySubmitButton {
     width: auto;
 }
-/* #edit_id {
+.edit, .delete {
+    width: 80px;
+}
+.hidden {
     display: none;
-} */
+}

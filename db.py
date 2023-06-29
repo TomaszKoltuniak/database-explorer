@@ -184,10 +184,23 @@ def edit_comments(comments, user, company_id):
     for comment in comments:
         with sqlite3.connect("database.sqlite3") as connection:
             cursor = connection.cursor()
-            query = f"""select * from comments where `id` = '?'"""
-            # values = (comment['id'])
-            print(comment)
-            # cursor.execute(query, values)
-            # result = cursor.fetchone()
-            # if result == None:
+            query = f"""UPDATE comments
+            SET `Content` = ?, `Author` = ?, `Creation date` = strftime('%Y-%m-%d %H:%M', 'now', 'localtime')
+            WHERE company_id = ?"""
+            values = (
+                comment['Content'],
+                user,
+                company_id,
+            )
+            cursor.execute(query, values)
+    return
+
+
+def delete_company(company_id: int):
+    with sqlite3.connect("database.sqlite3") as connection:
+        cursor = connection.cursor()
+        query = f"""DELETE FROM companies
+        WHERE id = ?"""
+        values = (company_id,)
+        cursor.execute(query, values)
     return

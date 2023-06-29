@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- admin -->
+  <!-- privileged -->
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Tomasz Koltuniak, Szymon Dembinski" />
+    <meta name="author" content="Tomasz Koltuniak" />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='logo-szwecja.png') }}"
     />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -26,16 +31,18 @@
 
   <body>
     <header>
-      <h1>Hi {{ name }}</h1>
-      <div>{{ email }}</div>
-      <a class="button" href="/logout">Logout</a>
+      <div>
+        <h1>Hi, {{ name }}</h1>
+        <div>{{ email }}</div>
+        <a class="button" href="/logout">Logout</a>
+      </div>
       <a href="/"
         ><img
           src="{{ url_for('static', filename='logo-szwecja.png') }}"
           alt="EU Mobility Sverige Logo"
           width="200"
-          height="200"
       /></a>
+
       <!-- Search form -->
       <form id="search_form" method="POST" action="/">
         <input
@@ -46,9 +53,7 @@
         />
         <datalist id="names">
           {% for name in companies_names %}
-          <option value="{{ name }}">
-          {% endfor %}
-          </option>
+          <option value="{{ name }}">{% endfor %}</option>
         </datalist>
 
         <input
@@ -59,9 +64,7 @@
         />
         <datalist id="fields">
           {% for field in fields %}
-          <option value="{{ field }}">
-          {% endfor %}
-          </option>
+          <option value="{{ field }}">{% endfor %}</option>
         </datalist>
 
         <input
@@ -75,6 +78,7 @@
         Add new company
       </button>
     </header>
+
     <!-- Add new company form -->
     <dialog id="addCompanyDialog">
       <form method="POST" action="/add" id="addCompanyForm">
@@ -86,24 +90,39 @@
           required
         /><br />
 
+        <label for="field_of_work">Field of work:</label>
+        <input
+          type="text"
+          list="fields"
+          id="field_of_work"
+          placeholder="Field of work"
+          name="field_of_work"
+        />
+        <datalist id="fields">
+          {% for field in fields %}
+          <option value="{{ field }}">{% endfor %}</option>
+        </datalist>
+        <br />
+
         <label for="address">Address:</label>
         <input type="text" id="address" name="address" required /><br />
 
-        <label for="contact_person">Name of Mentor/Contact person:</label>
-        <input
-          type="text"
-          id="contact_person"
-          name="contact_person"
-          required
-        /><br />
+        <label for="mentor">Name of Mentor/ Contact person:</label>
+        <input type="text" id="mentor" name="mentor" required /><br />
 
         <label for="phone_number">Phone number of the mentor:</label>
         <input
-          type="tel"
+          type="text"
           id="phone_number"
           name="phone_number"
           required
         /><br />
+
+        <label for="email">Contact email:</label>
+        <input type="text" id="email" name="email" required /><br />
+
+        <label for="website">Website:</label>
+        <input type="text" id="website" name="website" /><br />
 
         <label for="max_students">Number of Maximum Students:</label>
         <input
@@ -113,28 +132,35 @@
           required
         /><br />
 
-        <label for="field_of_work">Field of work:</label>
+        <label for="current_students">Current students count:</label>
         <input
-        type="text"
-        list="fields"
-        placeholder="Field of work"
-        name="field_of_work"
-      />
-      <datalist id="fields">
-        {% for field in fields %}
-        <option value="{{ field }}">
-        {% endfor %}
-        </option>
-      </datalist>
-        ><br />
-
-        <label for="latest_student_group">Latest student group:</label>
-        <input
-          type="text"
-          id="latest_student_group"
-          name="latest_student_group"
+          type="number"
+          id="current_students"
+          name="current_students"
           required
         /><br />
+
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" required /><br />
+
+        <label for="commute">Commute:</label>
+        <input type="text" id="commute" name="commute" required /><br />
+
+        <label for="equipment">Required additional equipment/ clothes:</label>
+        <input type="text" id="equipment" name="equipment" /><br />
+
+        <label for="info">Important information:</label>
+        <input type="text" id="info" name="info" /><br />
+
+        <label>Comments:</label>
+        <button
+          type="button"
+          onclick="addCommentField()"
+          class="btn btn-primary new_comment"
+        >
+          Add comment
+        </button>
+        <div id="comments"></div>
 
         <button
           value="cancel"
@@ -153,9 +179,131 @@
       </form>
     </dialog>
 
+    <!-- Edit company -->
+    <dialog id="editCompanyDialog">
+      <form method="POST" action="/edit" id="editCompanyForm">
+        <input type="hidden" id="e_id" name="e_id"/>
+
+        <label for="e_company_name">Name of the company:</label>
+        <input
+          type="text"
+          id="e_company_name"
+          name="company_name"
+          required
+        />
+
+        <label for="field_of_work">Field of work:</label>
+        <input
+          type="text"
+          list="fields"
+          id="e_field_of_work"
+          placeholder="Field of work"
+          name="field_of_work"
+        />
+        <datalist id="fields">
+          {% for field in fields %}
+          <option value="{{ field }}">{% endfor %}</option>
+        </datalist>
+
+        <label for="address">Address:</label>
+        <input type="text" id="e_address" name="address" required />
+
+        <label for="mentor">Name of Mentor/ Contact person:</label>
+        <input type="text" id="e_mentor" name="mentor" required />
+
+        <label for="phone_number">Phone number of the mentor:</label>
+        <input
+          type="text"
+          id="e_phone_number"
+          name="phone_number"
+          required
+        />
+
+        <label for="email">Contact email:</label>
+        <input type="text" id="e_email" name="email" required />
+
+        <label for="website">Website:</label>
+        <input type="text" id="e_website" name="website" />
+
+        <label for="max_students">Number of Maximum Students:</label>
+        <input
+          type="number"
+          id="e_max_students"
+          name="max_students"
+          required
+        />
+
+        <label for="current_students">Current students count:</label>
+        <input
+          type="number"
+          id="e_current_students"
+          name="current_students"
+          required
+        />
+
+        <label for="status">Status:</label>
+        <input type="text" id="e_status" name="status" required />
+
+        <label for="commute">Commute:</label>
+        <input type="text" id="e_commute" name="commute" required />
+
+        <label for="equipment">Required additional equipment/ clothes:</label>
+        <input type="text" id="e_equipment" name="equipment" />
+
+        <label for="info">Important information:</label>
+        <input type="text" id="e_info" name="info" />
+
+        <button
+          value="cancel"
+          formmethod="dialog"
+          onclick="closeDialog()"
+          class="btn btn-primary search_btn"
+        >
+          Cancel
+        </button>
+        <input
+          type="submit"
+          name="submit"
+          id="addCompanySubmitButton"
+          class="btn btn-primary search_btn"
+        />
+      </form>
+        
+      <!-- Comments form -->
+        <label>Comments:</label>
+        <button
+          type="button"
+          onclick="addCommentField()"
+          class="btn btn-primary new_comment"
+        >
+          Add comment 
+        </button>
+        <div id="e_comments">
+          {% for comment in comments %}
+          <input
+            type="text"
+            name="e_comments_content"
+            value="{{ comment['Content'] }}"
+          />
+          <input
+            type="text"
+            name="e_comments_author"
+            value="{{ comment['Author'] }}"
+            readonly
+          />
+          <input
+            type="text"
+            name="e_comments_date"
+            value="{{ comment['Date'] }}"
+            readonly
+          />
+          {% endfor %}
+        </div>
+
+    </dialog>
+
     <!-- All data table -->
-    <table class="table table-hover border-primary">
-      <div id="top_column"></div>
+    <table class="table table-hover">
       <thead>
         <tr>
           {% for column in columns %}
@@ -163,44 +311,37 @@
           {% endfor %}
         </tr>
       </thead>
-      <tbody class="table-group-divider">
+      <tbody>
         {% for item in output %}
         <tr>
-          {% for key, value in item.items() %}
+          {% for key, value in item.items() %} {% if key == 'Comments' %}
+          <td class="wrap_comments">
+            <ul>
+              {% for comment in value %}
+              <li>
+                {{ comment['Author'] }} {{ comment['Content'] }} {{
+                comment['Creation date'] }}
+              </li>
+              {% endfor %}
+            </ul>
+          </td>
+          {% elif key == 'id' %}
+          <td>
+            <button onclick="showEditDialog(`{{ value }}`, `{{ item }}`)" class="btn btn-primary search_btn edit">
+              Edit
+            </button>
+            <form method="POST" action="/delete">
+              <input type="hidden" name="d_id" value="{{ value }}" />
+              <input type="submit" value="Delete" class="btn search_btn btn-danger delete" />
+            </form>
+          </td>
+          {% else %}
           <td>{{ value }}</td>
-          {% endfor %}
+          {% endif %} {% endfor %}
         </tr>
         {% endfor %}
       </tbody>
     </table>
-
-    <script>
-      var showFormButton2 = document.getElementById("showFormButton2");
-      var addCompanyDialog = document.getElementById("addCompanyDialog");
-      var addCompanyForm = document.getElementById("addCompanyForm");
-      var addCompanySubmitButton = document.getElementById(
-        "addCompanySubmitButton"
-      );
-
-      showFormButton2.addEventListener("click", function () {
-        addCompanyDialog.showModal();
-      });
-
-      addCompanyForm.addEventListener("close", function () {
-        addCompanyDialog.submit();
-      });
-
-      function closeDialog() {
-        addCompanyDialog.close();
-      }
-
-      window.addEventListener("keydown", function (e) {
-        if (e.key == "Enter") {
-          if (addCompanyDialog.open) {
-            addCompanySubmitButton.click();
-          }
-        }
-      });
-    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>
