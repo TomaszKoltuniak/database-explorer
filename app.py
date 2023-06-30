@@ -162,7 +162,7 @@ def logout():
 
 
 def get_google_provider_cfg():
-    config = requests(os.environ.get("GOOGLE_DISCOVERY_URL")) or "https://accounts.google.com/.well-known/openid-configuration"
+    config = requests.get(os.environ.get("GOOGLE_DISCOVERY_URL")) or requests.get("https://accounts.google.com/.well-known/openid-configuration")
     return config.json()
 
 
